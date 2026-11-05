@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#17251f">
+  <title>Malibu Catalogo</title>
+  <meta name="description" content="Catálogo Malibu Catalogo. Consulta productos, precios y disponibilidad.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="topline"><span>MALIBU CATALOGO</span><span id="store-status-indicator" class="live status-online"><i></i><span id="store-status-text">EN LÍNEA</span></span></div>
+  <header class="hero">
+    <div class="hero-brand">
+      <img class="hero-logo" src="logo-malibu.png" alt="Logo morado MALIBU">
+      <div class="hero-brand-copy">
+        <p class="eyebrow">BIENVENIDO A</p>
+        <h1>MALIBU CATALOGO</h1>
+        <div class="slogan">CALIDAD · STOCK · BUENOS PRECIOS</div>
+      </div>
+    </div>
+    <section class="stats">
+      <article class="stat"><span>📦 EXISTENCIAS DISPONIBLES</span><strong id="total-stock">0 <small>unidades</small></strong><em>🔥 Catálogo actualizado</em></article>
+      <article class="stat"><span>💰 PRODUCTOS EN CATÁLOGO</span><strong id="total-products">0</strong><em>Consulta disponibilidad</em></article>
+      <article class="stat contact"><span>🟢 ¿NECESITAS AYUDA?</span><a id="discord-link" class="discord" href="#" target="_blank" rel="noopener">✦ Contactar por Discord</a><small>El enlace se configura en Administración</small></article>
+    </section>
+  </header>
+
+  <div class="tape"><span>⚠ PRECIOS Y DISPONIBILIDAD SUJETOS A ACTUALIZACIÓN ⚠ PRECIOS Y DISPONIBILIDAD SUJETOS A ACTUALIZACIÓN ⚠</span></div>
+
+  <main>
+    <section class="order-panel">
+      <div>
+        <p class="eyebrow">COMPRA FÁCIL</p>
+        <h2>ARMÁ TU PEDIDO</h2>
+        <p class="muted">Seleccioná los productos del catálogo y revisá el total.</p>
+      </div>
+      <div class="order-summary">
+        <div><span>PRODUCTOS</span><strong id="cart-count">0</strong></div>
+        <div><span>TOTAL</span><strong id="cart-total">$0</strong></div>
+      </div>
+      <button id="copy-order" class="primary" type="button">▣ COPIAR PEDIDO</button>
+       <a class="primary" href="https://discord.gg/DEPFcQg6p8" target="_blank" rel="noopener" style="display:inline-block;text-align:center;text-decoration:none;padding:12px 18px;border-radius:8px">MANDAR PEDIDO AQUÍ</a>
+      <p id="copy-status" class="hint" aria-live="polite">Luego podrás enviarlo por Discord.</p>
+    </section>
+
+    <section class="catalog">
+      <div class="section-heading"><div><p class="eyebrow">DESCUBRÍ NUESTROS PRODUCTOS</p><h2>CATÁLOGO</h2></div><span id="updated">Actualizado hoy</span></div>
+      <div id="product-grid" class="product-grid"></div>
+      <p id="empty-state" class="empty hidden">Todavía no hay productos publicados. Volvé pronto.</p>
+    </section>
+
+    <section class="admin-entry"><button id="open-admin" class="admin-link" type="button">⚙ Administración</button></section>
+  </main>
+
+  <footer>© <span id="year"></span> MALIBU CATALOGO · Todos los derechos reservados</footer>
+
+  <dialog id="admin-dialog" class="admin-dialog">
+    <div class="admin-head"><div><p class="eyebrow">PANEL PRIVADO</p><h2>ADMINISTRACIÓN</h2></div><button id="close-admin" class="close" aria-label="Cerrar">✕</button></div>
+    <div id="login-view">
+      <p class="muted">Inicia sesión con tu cuenta de administrador de Supabase.</p>
+      <label>Correo electrónico<input id="admin-email" type="email" autocomplete="username" placeholder="tu@correo.com"></label>
+       <label>Contraseña<input id="admin-password" type="password" autocomplete="current-password" placeholder="Contraseña"></label>
+      <button id="login-btn" class="primary" type="button">INGRESAR</button>
+      <p class="hint">Solo usuarios registrados en admin_users pueden modificar productos.</p>
+      <p id="login-error" class="error"></p>
+    </div>
+    <div id="admin-view" class="hidden">
+      <section class="status-editor" aria-label="Estado de la tienda">
+        <h3>Estado de la tienda</h3>
+        <p class="hint">Cambia el estado visible para todos los visitantes.</p>
+        <label for="store-status-select">Estado actual</label>
+        <select id="store-status-select">
+          <option value="online">🟢 EN LÍNEA</option>
+          <option value="offline">🔴 FUERA DE SERVICIO</option>
+          <option value="maintenance">🟡 EN MANTENIMIENTO</option>
+        </select>
+        <button id="save-store-status" class="primary" type="button">GUARDAR ESTADO</button>
+        <p id="store-status-feedback" class="hint" aria-live="polite"></p>
+      </section>
+      <div class="admin-tabs"><button id="logout-btn" class="secondary" type="button">CERRAR SESIÓN</button></div>
+      <section id="products-tab">
+        <h3 id="form-title">Agregar producto</h3>
+        <form id="product-form" class="admin-form">
+          <input type="hidden" id="edit-id">
+          <label>Nombre<input id="p-name" required maxlength="60" placeholder="Ej. Producto nuevo"></label>
+          <label>Descripción<textarea id="p-description" rows="2" maxlength="180" placeholder="Descripción breve"></textarea></label>
+          <div class="two-col">
+            <label>Precio (CLP)<input id="p-price" type="number" min="0" step="1" required placeholder="4000"></label>
+            <label>Stock<input id="p-stock" type="number" min="0" step="1" required placeholder="25"></label>
+          </div>
+          <label>Imagen (URL opcional)<input id="p-image" type="url" placeholder="https://..."></label>
+          <div class="form-actions"><button class="primary" type="submit">GUARDAR PRODUCTO</button><button id="cancel-edit" class="secondary hidden" type="button">CANCELAR</button></div>
+        </form>
+        <h3>Productos publicados</h3><div id="admin-product-list" class="admin-list"></div>
+      </section>
+             <div class="form-actions"><button id="export-data" class="secondary" type="button">DESCARGAR RESPALDO JSON</button><button id="import-local" class="secondary" type="button">IMPORTAR PRODUCTOS LOCALES</button></div>
+       <p class="hint">Importar productos locales solo agrega los que estén guardados en este navegador. No se importará el producto de ejemplo automáticamente.</p>
+       <p id="admin-status" class="hint" aria-live="polite"></p>
+       <p class="security-note">Los productos se guardan en Supabase. Solo administradores autorizados pueden modificarlos.</p>
+    </div>
+  </dialog>
+  <script type="module" src="script.js"></script>
+</body>
+</html>
